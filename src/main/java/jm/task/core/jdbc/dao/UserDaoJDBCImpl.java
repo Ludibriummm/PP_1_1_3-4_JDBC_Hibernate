@@ -23,6 +23,7 @@ public class UserDaoJDBCImpl implements UserDao {
                         "age INT)")) {
             dropUsersTable();
             preparedStatement.execute();
+            System.out.println("Создана таблица Users.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,6 +32,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement("DROP TABLE IF EXISTS Users")){
             preparedStatement.execute();
+            System.out.println("Таблица Users удалена.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -45,6 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(3, lastName);
             preparedStatement.setByte(4, age);
             preparedStatement.execute();
+            System.out.println("В таблицу Users добавлен " + name + ".");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +57,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE from users where id = ?")){
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
+            System.out.println("Из таблицы удален User с id: " + id + ".");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -70,6 +74,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setId(resultSet.getLong("id"));
                 allUsers.add(user);
             }
+            System.out.println("В таблице находятся:\n" + allUsers);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,6 +84,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try (PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE from Users")){
             preparedStatement.execute();
+            System.out.println("Таблица Users очищена.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
