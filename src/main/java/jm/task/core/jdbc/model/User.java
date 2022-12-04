@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Table(name = "Users")
 public class User {
@@ -12,7 +11,6 @@ public class User {
 //    @GeneratedValue(strategy = IDENTITY) //AUTO, SEQUENCE, TABLE
     @Column(name = "id")
     private Long id;
-    private static AtomicLong idCounter=new AtomicLong(0);
 
     @Column(name = "name")
     private String name;
@@ -30,7 +28,6 @@ public class User {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.id=idCounter.addAndGet(1);
     }
 
     public Long getId() {

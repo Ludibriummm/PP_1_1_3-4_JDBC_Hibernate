@@ -18,15 +18,16 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try(PreparedStatement preparedStatement = connection.
-                prepareStatement("CREATE TABLE Users (id INT not null auto_increment primary key, " +
-                        "name VARCHAR(20), " +
-                        "lastName VARCHAR(20), " +
-                        "age INT)")) {
-            dropUsersTable();
+                prepareStatement("CREATE TABLE IF NOT EXISTS Users(" +
+                                        "id INT NOT NULL AUTO_INCREMENT, " +
+                                        "name VARCHAR(20) NOT NULL, " +
+                                        "lastName VARCHAR(20) NOT NULL , " +
+                                        "age INT NOT NULL," +
+                                        "PRIMARY KEY (id))")) {
             preparedStatement.execute();
         } catch (SQLException e) {
             System.err.println("Не удалось создать таблицу");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -40,14 +41,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users VALUES(?, ? ,?, ?)")){
-            User user = new User(name, lastName, age);
-
-            preparedStatement.setLong(1, user.getId());
-            preparedStatement.setString(2, name);
-            preparedStatement.setString(3, lastName);
-            preparedStatement.setByte(4, age);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users(name, lastName, age) " +
+                                                                                    "VALUES(? ,?, ?)")){
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
             preparedStatement.execute();
+            System.out.println("User с именем - " + name + " добавлен в базу данных");
         } catch (SQLException e) {
             System.err.println("Не удалось добавить пользователя");
             e.printStackTrace();
